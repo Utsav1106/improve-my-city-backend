@@ -1,13 +1,15 @@
 import { getUser } from "@/services/user";
-import { Output, Request } from "@/types/helpers";
-import { output } from "@/utils/helpers";
+import { Request } from "@/types/helpers";
 
-export const getMyUser = async (req: Request): Promise<Output> => {
+export const getMyUser = async (req: Request) => {
     const { userId } = req.user;
     const user = await getUser(userId);
-    return output(true, '', {
+
+    return {
         id: user._id,
         email: user.email,
-        name: user.name
-    })
+        name: user.name,
+        isAdmin: user.isAdmin,
+        createdAt: user.createdAt
+    }
 }

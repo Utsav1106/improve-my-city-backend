@@ -1,7 +1,6 @@
 import { JWT_SECRET_KEY } from '@/config/env';
 import { Request } from '@/types/helpers';
 import { UnauthorizedError } from '@/utils/errors';
-import { output } from '@/utils/helpers';
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken'
 
@@ -23,9 +22,9 @@ export const verifyUser = async (req: Request, res: Response, next: NextFunction
         next();
     } catch (e) {
         if (e instanceof jwt.TokenExpiredError) {
-            res.status(401).json(output(false, 'Token expired', { authFailed: true }));
+            res.status(401).json({ authFailed: true });
         } else {
-            res.status(401).json(output(false, 'Unauthorized', { authFailed: true }));
+            res.status(401).json({ authFailed: true });
         }
     }
 };

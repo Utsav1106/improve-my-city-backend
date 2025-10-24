@@ -1,15 +1,13 @@
 import { Request } from 'express';
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET_KEY } from '@/config/env';
-import { Output } from '@/types/helpers';
 import { createUser, verifyPassword } from '@/services/auth';
-import { output } from '@/utils/helpers';
 import { UnauthorizedError, ValidationError } from '@/utils/errors';
 import userModel from '@/models/user';
 
-export const signUp = async (req: Request): Promise<Output> => {
+export const signUp = async (req: Request) => {
     const { email, password, name } = req.body;
-    
+
     if (!email) throw new ValidationError("Email is not provided");
     if (!password) throw new ValidationError("Password is not provided");
     if (!name) throw new ValidationError("Name is not provided");
@@ -28,19 +26,19 @@ export const signUp = async (req: Request): Promise<Output> => {
 
     const token = jwt.sign(jwtPayload, JWT_SECRET_KEY, { expiresIn: '7d' });
 
-    return output(true, 'User created successfully', { 
+    return {
         token,
         user: {
             id: user._id,
             email: user.email,
             name: user.name
         }
-    });
+    }
 }
 
-export const signIn = async (req: Request): Promise<Output> => {
+export const signIn = async (req: Request) => {
     const { email, password } = req.body;
-    
+
     if (!email) throw new ValidationError("Email is not provided");
     if (!password) throw new ValidationError("Password is not provided");
 
@@ -57,12 +55,12 @@ export const signIn = async (req: Request): Promise<Output> => {
 
     const token = jwt.sign(jwtPayload, JWT_SECRET_KEY, { expiresIn: '7d' });
 
-    return output(true, 'Signed in successfully', { 
+    return {
         token,
         user: {
             id: user._id,
             email: user.email,
             name: user.name
         }
-    });
+    }
 }

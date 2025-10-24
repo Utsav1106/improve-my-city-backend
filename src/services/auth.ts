@@ -25,6 +25,8 @@ export const createUser = async (email: string, password: string, name: string) 
     const hashedPassword = await hashPassword(password);
     const user = await userModel.create({
         email,
+        createdAt: Date.now(),
+        isAdmin: false,
         password: hashedPassword,
         name,
         data: {}
