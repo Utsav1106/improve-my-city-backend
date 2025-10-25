@@ -63,6 +63,8 @@ interface GetIssuesFilters {
     radiusKm?: number;
     page?: number;
     limit?: number;
+    sortBy?: 'createdAt' | 'upvotes';
+    sortOrder?: 'asc' | 'desc';
 }
 
 const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
@@ -100,15 +102,16 @@ export const getIssues = async (filters: GetIssuesFilters): Promise<{
     const page = filters.page || 1;
     const limit = filters.limit || 20;
 
-    // Get total count for pagination
+    const sortBy = filters.sortBy || 'createdAt';
+    const sortOrder = filters.sortOrder === 'asc' ? 1 : -1;
+
     const total = await issueModel.countDocuments(query);
     
-    // Calculate pagination
     const skip = (page - 1) * limit;
     const totalPages = Math.ceil(total / limit);
 
     let issues = await issueModel.find(query)
-        .sort({ createdAt: -1 })
+        .sort({ [sortBy]: sortOrder })
         .skip(skip)
         .limit(limit)
         .lean();

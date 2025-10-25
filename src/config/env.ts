@@ -14,3 +14,4 @@ const required = (key: string, value?: string): string => {
 export const PORT = process.env.PORT || '8095'
 export const MONGO_URI = required('MONGO_URI', process.env.MONGO_URI)
 export const JWT_SECRET_KEY = required('JWT_SECRET_KEY', process.env.JWT_SECRET_KEY)
+export const GROQ_API_KEY = process.env.GROQ_API_KEY || ''

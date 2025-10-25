@@ -82,7 +82,9 @@ const getIssuesSchema = z.object({
     longitude: z.string().optional(),
     radiusKm: z.string().optional(),
     page: z.string().optional(),
-    limit: z.string().optional()
+    limit: z.string().optional(),
+    sortBy: z.enum(['createdAt', 'upvotes']).optional(),
+    sortOrder: z.enum(['asc', 'desc']).optional()
 });
 
 export const fetchAllIssues = async (req: Request) => {
@@ -120,7 +122,9 @@ export const fetchAllIssues = async (req: Request) => {
         longitude,
         radiusKm,
         page,
-        limit
+        limit,
+        sortBy: validatedQuery.sortBy,
+        sortOrder: validatedQuery.sortOrder
     });
 
     return {
