@@ -10,6 +10,7 @@ export interface Request extends ExpressRequest {
     user: {
         userId: string;
         email: string;
+        isAdmin: boolean;
     }
 }
 

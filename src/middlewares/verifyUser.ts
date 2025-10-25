@@ -1,4 +1,5 @@
 import { JWT_SECRET_KEY } from '@/config/env';
+import { getUser } from '@/services/user';
 import { Request } from '@/types/helpers';
 import { UnauthorizedError } from '@/utils/errors';
 import { Response, NextFunction } from 'express';
@@ -15,9 +16,11 @@ export const verifyUser = async (req: Request, res: Response, next: NextFunction
         const decoded: any = jwt.verify(token, JWT_SECRET_KEY);
 
         if (!decoded.userId || !decoded.email) throw new UnauthorizedError("Unauthorized")
+        const user = await getUser(decoded.userId);
         req.user = {
             userId: decoded.userId,
-            email: decoded.email
+            email: decoded.email,
+            isAdmin: user?.isAdmin || false
         };
         next();
     } catch (e) {
@@ -39,10 +42,12 @@ export const verifyUserOptional = async (req: Request, _: Response, next: NextFu
 
         const decoded: any = jwt.verify(token, JWT_SECRET_KEY);
         if (!decoded.userId || !decoded.email) return next()
-
+            
+        const user = await getUser(decoded.userId);
         req.user = {
             userId: decoded.userId,
-            email: decoded.email
+            email: decoded.email,
+            isAdmin: user?.isAdmin || false
         };
         next();
     } catch (e) {

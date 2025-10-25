@@ -1,5 +1,6 @@
 export interface Issue {
     _id?: string;
+    status: 'open' | 'in_progress' | 'resolved' | 'closed';
     userId: string;
     title: string;
     description: string;
@@ -10,7 +11,11 @@ export interface Issue {
         longitude: number;
         address: string;
     };
+    upvotes?: number;
+    upvotedBy?: string[];
+    resolutionMessage?: string;
+    resolutionUploadUrls?: string[];
+    resolvedAt?: number;
     createdAt: number;
     updatedAt: number;
-    status: 'open' | 'in_progress' | 'resolved' | 'closed';
 }
